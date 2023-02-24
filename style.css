@@ -1,0 +1,52 @@
+body{
+    background-color: rgb(219, 228, 238);
+}
+.header{
+    background-color: white;
+    position: sticky;
+}
+
+.content{
+    background-color: rgb(219, 228, 238);;
+}
+.main{
+    width:93%;
+    max-width: 1400px;
+    margin: 0 auto;
+    margin-top: 26px;
+}
+.mainElement{
+    background-color: white;
+    margin-bottom: 20px;
+}
+#createPost{
+    display: flex;
+    padding: 8px;
+}
+#postInput{
+    flex-grow: 4;
+}
+#postIcons{
+    display: flex;
+    width: 100px;
+    align-items: center;
+    justify-content: space-around ;
+}
+.sortOptions{
+    width: 400px;
+    display: flex;
+    justify-content: space-around;
+}
+.sortOption{
+    display: flex;
+    font-size: large;
+    align-items: center;
+}
+
+/* @media (min-width:1600px){
+    .main{
+        max-width: 1400px;
+        margin: 0 3%;
+    }
+} */
+/* *{border: solid black;} */
