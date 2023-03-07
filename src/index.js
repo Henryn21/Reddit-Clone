@@ -61,15 +61,32 @@ fetch("https://www.reddit.com/r/cscareerquestions/comments/11gqslm/the_hustle_cu
 let getStuff= async (community, sort)=>{
     let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json`);
     let myData= await results.json();
-    console.log(myData);
-    // console.log(myData.data.children);
-    return  await myData;//build post components based on returned posts info
+    return myData.data.children;//build post components based on returned posts info
 }
 //fill page with post html, deciding on strings vs dom functions to append new post data
-let fillPage= async (postList)=>{
-    console.log(postList.data.children);
-    let titleElement=`<h1>${postList[0].data.title}</h1>`;
-    document.querySelector("#DUM").innerHTML=titleElement;
+let fillPage=(postList)=>{
+    console.log(postList);
+    for(let i=0;i<postList.length;i++){
+        let newPost=document.createElement("div");
+        newPost.classList.add("post");
+        newPost.innerHTML=`
+        <div class="postVote">
+            <i class="fa-solid fa-thumbs-up"></i>
+            <p class="postScore">${postList[i].data.score}</p>
+            <i class="fa-solid fa-thumbs-down"></i>
+        </div>
+        <div class="postBody">
+            <div class="postHeader">
+                <p class="postCommunity">${postList[i].data.subreddit}</p>
+                <p class="postAuthor">${postList[i].data.author}</p>
+            </div>
+            <div class="postContent">
+                <h1 class="postTitle">${postList[i].data.title}</h1>
+                <p>${postList[i].data.selftext}</p>
+            </div>
+        </div>`
+        document.querySelector("#feed").appendChild(newPost);
+    }
 }
 //async so await?    but not top level, so ?
 getStuff("careeradvice", "best").then((bestAdvicePosts)=>{fillPage(bestAdvicePosts)})
