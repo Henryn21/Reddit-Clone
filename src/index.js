@@ -1,23 +1,23 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore,getDocs,collection,doc, getDoc } from "firebase/firestore";
-const firebaseConfig = {
-    apiKey: "AIzaSyC9JcH18aP98luiEZyAnbyyfje43HYhZO8",
-    authDomain: "notreddit-73615.firebaseapp.com",
-    projectId: "notreddit-73615",
-    storageBucket: "notreddit-73615.appspot.com",
-    messagingSenderId: "699529099968",
-    appId: "1:699529099968:web:fa911cf6a76ebd522b0b25"
-};
+// import { initializeApp } from 'firebase/app';
+// import { getFirestore,getDocs,collection,doc, getDoc } from "firebase/firestore";
+// const firebaseConfig = {
+//     apiKey: "AIzaSyC9JcH18aP98luiEZyAnbyyfje43HYhZO8",
+//     authDomain: "notreddit-73615.firebaseapp.com",
+//     projectId: "notreddit-73615",
+//     storageBucket: "notreddit-73615.appspot.com",
+//     messagingSenderId: "699529099968",
+//     appId: "1:699529099968:web:fa911cf6a76ebd522b0b25"
+// };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-//test to read data on fb
-let showData=async ()=>{
-    const docRef = doc(db, "yo", "NREu5f4BEGNfREtNXEDs");
-    const docSnap = await getDoc(docRef);
-    console.log(docSnap.data());
-}
-showData();
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+// //test to read data on fb
+// let showData=async ()=>{
+//     const docRef = doc(db, "yo", "NREu5f4BEGNfREtNXEDs");
+//     const docSnap = await getDoc(docRef);
+//     console.log(docSnap.data());
+// }
+// showData();
 //variables for post template, CHANGE TO CREATE NEW ELEMENTS!!!!
 // let titleElement=document.querySelector("#templateHeader");
 // let authorElement=document.querySelector("#templatePoster");
@@ -52,20 +52,28 @@ fetch("https://www.reddit.com/r/cscareerquestions/comments/11gqslm/the_hustle_cu
         titleElement.textContent=title;
         authorElement.textContent=poster;
         communityElement.textContent=comm;
-        contentElement.textContent=postContent;
+        contentElement.textContent=postContent.substring(0,500);
     })
     .catch(function(err) {
         console.log(err);   // Log error if any
     });
     //returns promise
 let getStuff= async (community, sort)=>{
-    let results= await fetch(`https://www.reddit.com/r/${community}/${sort}.json`);
-    let data=results.json();
-    console.log(data);
-    return data;//build post components based on returned posts info
+    let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json`);
+    let myData= await results.json();
+    console.log(myData);
+    // console.log(myData.data.children);
+    return  await myData;//build post components based on returned posts info
 }
-    
-getStuff();
+//fill page with post html, deciding on strings vs dom functions to append new post data
+let fillPage= async (postList)=>{
+    console.log(postList.data.children);
+    let titleElement=`<h1>${postList[0].data.title}</h1>`;
+    document.querySelector("#DUM").innerHTML=titleElement;
+}
+//async so await?    but not top level, so ?
+getStuff("careeradvice", "best").then((bestAdvicePosts)=>{fillPage(bestAdvicePosts)})
+
 
 
 

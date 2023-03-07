@@ -55,11 +55,13 @@ body{
 .post{
     display: flex;
     border:  2px solid lightgray;
+    /* max-height:350px ; */
 }
 .postHeader{
     display: flex;
     justify-content: flex-start;
     gap:20px;
+    padding-left: 20px;
 }
 .postVote{
     background-color: rgb(219, 233, 250);
@@ -71,18 +73,17 @@ body{
 }
 .postBody{
     background-color: white;
-    max-height:250px ;
 }
 .fadeoutText{
     -webkit-mask-image: linear-gradient(180deg,#000 60%,transparent);
 }
 .postContent{
-    -webkit-mask-image: linear-gradient(180deg,#000 60%,transparent);/*FIX doesnt cut off*/
+    -webkit-mask-image: linear-gradient(180deg,#000 60%,transparent);
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 20px;
+    padding: 0px 20px;
     font-size:20px;
 }
 .postTitle{
-    padding-left: 20px;
+   font-size: 28px;
 }
