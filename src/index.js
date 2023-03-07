@@ -82,7 +82,7 @@ let fillPage=(postList)=>{
             </div>
             <div class="postContent">
                 <h1 class="postTitle">${postList[i].data.title}</h1>
-                <p>${postList[i].data.selftext}</p>
+                <p>${postList[i].data.selftext.substring(0,500)}</p>
             </div>
         </div>`
         document.querySelector("#feed").appendChild(newPost);
