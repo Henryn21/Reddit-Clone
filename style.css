@@ -65,11 +65,11 @@ body{
 }
 .postVote{
     background-color: rgb(219, 233, 250);
-    display: flex;
-    flex-direction: column;
+    /* display: flex;
+    flex-direction: column; */
     width: 120px;/*FIX smooshes and stretches, not set*/
-    align-items: center;
-    justify-content: flex-start;
+    /* align-items: center;
+    justify-content: flex-start; */
 }
 .postBody{
     background-color: white;
