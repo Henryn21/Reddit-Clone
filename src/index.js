@@ -18,53 +18,50 @@
 //     console.log(docSnap.data());
 // }
 // showData();
-//variables for post template, CHANGE TO CREATE NEW ELEMENTS!!!!
-// let titleElement=document.querySelector("#templateHeader");
-// let authorElement=document.querySelector("#templatePoster");
-// let communityElement=document.querySelector("#templateCommunity");
-// let contentElement=document.querySelector("#templateContent");
+
 //variables for post info
 let postJson;
 let title;
 let comm;
 let poster;
 let postContent;
-//fetch api on url with .json at end
-fetch("https://www.reddit.com/r/cscareerquestions/comments/11gqslm/the_hustle_culture_posts_are_very_off_putting/.json")
-    .then((res)=>{
-        return res.json();
-    })
-    .then((postInfo)=>{
-        // console.log(postInfo[0].data.children[0].data.);
-        //fix : ugly
-        let titleElement=document.querySelector("#templateTitle");
-        let authorElement=document.querySelector("#templatePoster");
-        let communityElement=document.querySelector("#templateCommunity");
-        let contentElement=document.querySelector("#templateContent");
-        //see above
-        postJson=postInfo[0].data.children[0].data;
-        poster=postJson.author;
-        title=postJson.title;
-        comm=postJson.subreddit;
-        //selftexthtml is a property, maybe creates elements? Not by default :(
-        postContent=postJson.selftext;
-        //write to html, FIX: swap to dynamic created elements or something
-        titleElement.textContent=title;
-        authorElement.textContent=poster;
-        communityElement.textContent=comm;
-        contentElement.textContent=postContent.substring(0,500);
-    })
-    .catch(function(err) {
-        console.log(err);   // Log error if any
-    });
-    //returns promise
-let getStuff= async (community, sort)=>{
+//fetch api on url with .json at end, for testing with template post
+// fetch("https://www.reddit.com/r/cscareerquestions/comments/11gqslm/the_hustle_culture_posts_are_very_off_putting/.json")
+//     .then((res)=>{
+//         return res.json();
+//     })
+//     .then((postInfo)=>{
+//         // console.log(postInfo[0].data.children[0].data.);
+//         //fix : ugly
+//         let titleElement=document.querySelector("#templateTitle");
+//         let authorElement=document.querySelector("#templatePoster");
+//         let communityElement=document.querySelector("#templateCommunity");
+//         let contentElement=document.querySelector("#templateContent");
+//         //see above
+//         postJson=postInfo[0].data.children[0].data;
+//         poster=postJson.author;
+//         title=postJson.title;
+//         comm=postJson.subreddit;
+//         //selftexthtml is a property, maybe creates elements? Not by default :(
+//         postContent=postJson.selftext;
+//         //write to html, FIX: swap to dynamic created elements or something
+//         titleElement.textContent=title;
+//         authorElement.textContent=poster;
+//         communityElement.textContent=comm;
+//         contentElement.textContent=postContent.substring(0,500);
+//     })
+//     .catch(function(err) {
+//         console.log(err);   // Log error if any
+//     });
+
+let getStuff= async (community, sort="best")=>{
     let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json`);
     let myData= await results.json();
     return myData.data.children;//build post components based on returned posts info
 }
 //fill page with post html, deciding on strings vs dom functions to append new post data
 let fillPage=(postList)=>{
+    clearFeed();
     console.log(postList);
     for(let i=0;i<postList.length;i++){
         let newPost=document.createElement("div");
@@ -88,10 +85,16 @@ let fillPage=(postList)=>{
         document.querySelector("#feed").appendChild(newPost);
     }
 }
-//async so await?    but not top level, so ?
+
 getStuff("careeradvice", "best").then((bestAdvicePosts)=>{fillPage(bestAdvicePosts)})
-
-
+//select community using dropdown
+let getCommunity= (community)=>{
+    getStuff(community, "best").then((communityPosts)=>{fillPage(communityPosts)});
+}
+//clear feed
+let clearFeed=()=>{
+    document.querySelector("#feed").innerHTML=``;
+}
 
 
 //community feed 2

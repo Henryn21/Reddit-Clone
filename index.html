@@ -22,8 +22,9 @@
         </a>
         <ul class="dropdown-menu" id="communitiesList" aria-labelledby="dropdownMenuLink">
           <li><input id="communitySearchBar" class="dropdown-item" placeholder="Filter"></input></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <li><a class="dropdown-item" href="#" id="cscareerquestions" onclick="getCommunity(document.querySelector('#cscareerquestions').textContent)">cscareerquestions</a></li>
+          <li><a class="dropdown-item" href="#" id="MaliciousCompliance" onclick="getCommunity(document.querySelector('#MaliciousCompliance').textContent)">MaliciousCompliance</a></li>
+          <li><a class="dropdown-item" href="#" id="aiArt" onclick="getCommunity(document.querySelector('#aiArt').textContent)">aiArt</a></li>
         </ul>
       </div>
       <input id="search" placeholder="Search NotReddit"></input>
@@ -59,7 +60,7 @@
         <div id="feed">
             <!--Posts go here, from followed communities-->
             <!--Post Element template-->
-            <div id="postTemplate" class="post">
+            <!-- <div id="postTemplate" class="post">
               <div id="templateVote" class="postVote">
                 <i class="fa-solid fa-thumbs-up"></i>
                 <p id="templateScore" class="postScore">3</p>
@@ -75,7 +76,7 @@
                   <p id="templateContent"></p>
                 </div>
               </div>
-            </div>
+            </div> -->
         </div>
     </main>
   </div>
