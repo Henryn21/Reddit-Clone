@@ -52,10 +52,15 @@ body{
 }
 .sortOption{
     display: flex;
-    font-size: large;
+    font-size: 22px;
     align-items: center;
 }
-
+.sortOption>p{
+    margin: 0;
+}
+.sortOption:hover {
+    color:blue;
+}
 /* @media (min-width:1600px){
     .main{
         max-width: 1400px;
@@ -82,8 +87,14 @@ body{
     text-align: center;
     font-size: 18px;
     font-weight: bold;
+    padding-top:5px;
+}
+.postScore{
+    margin: 0;
+    padding: 0;
 }
 .postBody{
+    padding-top:5px;
     background-color: white;
 }
 .fadeoutText{
@@ -98,4 +109,11 @@ body{
 }
 .postTitle{
    font-size: 28px;
+}
+.postCommunity{
+    font-weight: bold;
+}
+
+.selectedPost{
+    width: 80%;
 }

@@ -25,6 +25,10 @@ let title;
 let comm;
 let poster;
 let postContent;
+
+//current community/subreddit
+let currentCommunity="careeradvice";
+let currentPosts;
 //fetch api on url with .json at end, for testing with template post
 // fetch("https://www.reddit.com/r/cscareerquestions/comments/11gqslm/the_hustle_culture_posts_are_very_off_putting/.json")
 //     .then((res)=>{
@@ -63,7 +67,9 @@ let getStuff= async (community, sort="best")=>{
 let fillPage=(postList)=>{
     clearFeed();
     console.log(postList);
+    currentPosts=postList;
     for(let i=0;i<postList.length;i++){
+        document.querySelector("#dropdownMenuLink").textContent=`r/${postList[i].data.subreddit}`;
         let newPost=document.createElement("div");
         newPost.classList.add("post");
         newPost.innerHTML=`
@@ -74,33 +80,49 @@ let fillPage=(postList)=>{
         </div>
         <div class="postBody">
             <div class="postHeader">
-                <p class="postCommunity">${postList[i].data.subreddit}</p>
-                <p class="postAuthor">${postList[i].data.author}</p>
+                <p class="postCommunity">r/${postList[i].data.subreddit}</p>
+                <p class="postAuthor">Posted by ${postList[i].data.author}</p>
             </div>
             <div class="postContent">
                 <h1 class="postTitle">${postList[i].data.title}</h1>
                 <p>${postList[i].data.selftext.substring(0,500)}</p>
             </div>
         </div>`
+        newPost.id=i;
+        newPost.addEventListener("click", ()=>{popUp(newPost)});
+        // newPost.id=postList[i].data.id;
         document.querySelector("#feed").appendChild(newPost);
     }
 }
-
+//first call/default posts
 getStuff("careeradvice", "best").then((bestAdvicePosts)=>{fillPage(bestAdvicePosts)})
 //select community using dropdown
 let getCommunity= (community)=>{
     getStuff(community, "best").then((communityPosts)=>{fillPage(communityPosts)});
+    currentCommunity=community;
 }
 //clear feed
 let clearFeed=()=>{
     document.querySelector("#feed").innerHTML=``;
 }
+//sort posts options
+let sortPosts=(sortType)=>{
+    console.log("sorting by "+sortType);
+    getStuff(currentCommunity, sortType).then((communityPosts)=>{fillPage(communityPosts)});
+}
 
+let popUp=(post)=>{
+    //select post
+    console.log(currentPosts[post.id].data.selftext);
+    // currentPosts[]
+    //show full post, show comments,
+    //if comment has replies, append as child div
+}
 
-//community feed 2
-//main feed 1
-//sort
-//create post 3
+//community feed X
+//main feed 
+//sort X
+//create post 
 //comment 4
 //reply 5
 //vote 1
