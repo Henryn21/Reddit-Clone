@@ -1,0 +1,33 @@
+GET http://localhost:3333/ HTTP/1.1
+
+###
+
+GET http://localhost:3333/users HTTP/1.1
+
+###
+
+GET http://localhost:3333/feature HTTP/1.1
+
+###
+
+GET http://localhost:3333/auth/logout HTTP/1.1
+
+###
+
+POST http://localhost:3333/auth/signup HTTP/1.1
+content-type: application/json
+
+{
+    "email": "j@j.com",
+    "password": "test"
+}
+
+###
+
+POST http://localhost:3333/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "j@j.com",
+    "password": "test"
+}

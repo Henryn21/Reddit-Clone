@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotReddit</title>
+    <link rel="icon" type="image/x-icon" href="./images/rlogo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/1b9dff84a3.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="./src/index.js" defer></script>
+    <!-- <script src="./dist/bundle.js"></script> -->
+  </head>
+<body>
+  <header class="navbar header">
+    <div class="container-fluid">
+      <div id="home" class="navbar-brand">Not Reddit</div>
+      <div id="communitySearch" class="dropdown">
+        <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          Current Community
+        </a>
+        <ul class="dropdown-menu" id="communitiesList" aria-labelledby="dropdownMenuLink">
+          <li><input id="communitySearchBar" class="dropdown-item" placeholder="Filter"></input></li>
+          <li><a class="dropdown-item" href="#" id="cscareerquestions" onclick="getCommunity(document.querySelector('#cscareerquestions').textContent)">cscareerquestions</a></li>
+          <li><a class="dropdown-item" href="#" id="MaliciousCompliance" onclick="getCommunity(document.querySelector('#MaliciousCompliance').textContent)">MaliciousCompliance</a></li>
+          <li><a class="dropdown-item" href="#" id="aiArt" onclick="getCommunity(document.querySelector('#aiArt').textContent)">aiArt</a></li>
+        </ul>
+      </div>
+      <input id="search" placeholder="Search NotReddit"></input>
+      <i class="fa-regular fa-comment"></i>
+      <button id="profile">Sign In</button>
+    </div>
+  </header>
+  <div class="content">
+    <main class="main">
+        <div id="createPost" class="navbar mainElement">
+          <input placeholder="Create Post" type="text" name="" id="postInput">
+          <div id="postIcons">
+            <i class="fa-regular fa-image fa-lg"></i>
+            <i class="fa-solid fa-link fa-lg"></i>
+          </div>
+        </div>
+        <div id="sortPost" class="navbar  mainElement">
+          <div class="sortOptions">
+            <div class="sortOption" id="best" onclick="sortPosts(`best`)">
+              <p><i class="fa-solid fa-rocket"></i> Best</p>
+            </div>
+            <div class="sortOption" id="hot" onclick="sortPosts(`hot`)">
+              <p><i class="fa-solid fa-fire-flame-simple"></i> Hot</p>
+            </div>
+            <div class="sortOption" id="new" onclick="sortPosts(`new`)">
+              <p><i class="fa-solid fa-certificate"></i> New</p>
+            </div>
+            <div class="sortOption" id="top" onclick="sortPosts(`top`)">
+              <p><i class="fa-solid fa-arrow-up-right-dots"></i> Top</p>
+            </div>
+          </div>
+        </div>
+        <div id="feed">
+            <!--Posts go here, from followed communities-->
+            <!--Post Element template-->
+            <!-- <div id="postTemplate" class="post">
+              <div id="templateVote" class="postVote">
+                <i class="fa-solid fa-thumbs-up"></i>
+                <p id="templateScore" class="postScore">3</p>
+                <i class="fa-solid fa-thumbs-down"></i>
+              </div>
+              <div id="templateBody" class="postBody">
+                <div id="templateHeader" class="postHeader">
+                  <p id="templateCommunity" class="postCommunity"></p>
+                  <p id="templatePoster" class="postAuthor"></p>
+                </div>
+                <div class="postContent">
+                  <h1 id="templateTitle" class="postTitle"></h1>
+                  <p id="templateContent"></p>
+                </div>
+              </div>
+            </div> -->
+        </div>
+    </main>
+  </div>
+  <div class="overlay">
+    <div class="selectedContainer">
+      <div class="selectedContainerHeader">X</div>
+    </div>
+  </div>
+</body>
+
+</html>
