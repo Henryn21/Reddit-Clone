@@ -21,23 +21,6 @@ let collectionName="users";
 var app = express();
 var PORT = process.env.PORT || 8080;
 
-// template for setting up 
-// async function thing() {
-  // try {
-  //   await client.connect();
-  //   let collection=client.db(dbName).collection(collectionName);
-    
-  // }
-  // catch (error) {
-  //   console.log(error);
-  //   res.sendStatus(500);
-  // }
-  // finally {
-  //   // Ensures that the client will close when you finish/error
-  //   await client.close();
-  // }
-// }
-
 
 
 
@@ -54,7 +37,7 @@ app.use(cors({
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false
 }));
 // "database" object for storing users
 var users = {};
@@ -75,16 +58,24 @@ app.post("/auth/signup", async function(req, res) {
   try {
     //get db
     await client.connect();
-    let collection=client.db(dbName).collection(collectionName);
+    let collection= client.db(dbName).collection(collectionName);
     console.log(req.body);
-    //encrypt password
-    const password = bcrypt.hashSync(req.body.password, salt);
-    req.body.password = password;
-    console.log(req.body);
-    //save user to db
-    const result = await collection.insertOne({name:req.body.email, password:password});
-    res.json(req.body);
-    // res.status(200).send(result);
+    //check if user exists
+    let foundUsers= await collection.find({name:req.body.email}).toArray();
+    console.log("User exists?", foundUsers)
+    if(!foundUsers.length>=1){
+      //encrypt password
+      const password = bcrypt.hashSync(req.body.password, salt);
+      req.body.password = password;
+      console.log(req.body);
+      //save user to db
+      const result = await collection.insertOne({name:req.body.email, password:password});
+      res.json(req.body);
+      // res.status(200).send(result);
+    }
+    else{
+      console.log("Signup failed")
+    }
   }
   catch (error) {
     console.log(error);
@@ -103,6 +94,7 @@ app.post("/auth/login", async function(req, res) {
     let collection=client.db(dbName).collection(collectionName);
     //search db
     const result=await collection.find({name:req.body.email}).toArray();
+    console.log(result)
     //set found user to current
     var user = result[0].name;
     console.log("Found user ",result[0].name, req.body.email);
@@ -124,7 +116,7 @@ app.post("/auth/login", async function(req, res) {
     }
   }
   catch (error) {
-    console.log(error);
+    console.log("Log in failed, sad",error);
     res.sendStatus(500);
   }
   finally {

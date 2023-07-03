@@ -163,27 +163,35 @@ document.querySelector(".overlay").addEventListener("click",(e)=>{closePost(e)})
 //main feed 
 //sort X
 //create post 
-//comment 4
+//comment x
 //reply 5
 //vote 1
-//pop up post when clicked
+//pop up post when clicked x
 
+
+//log in screen pop up
+let loginOverlay=document.querySelector(".loginOverlay");
+let logInPopUp=()=>{
+    loginOverlay.classList.add("visible");
+}
+//clear login pop up
+let closeLogin=()=>{
+    loginOverlay.classList.remove("visible");
+}
+let closeLoginButton=document.querySelector("#closeLogin");
+closeLoginButton.addEventListener("click", closeLogin)
 //Log in function
-// POST http://localhost:3333/auth/signup HTTP/1.1
-// content-type: application/json
-
-// {
-//     "email": "j@j.com",
-//     "password": "test"
-// }
-//TEST BUTTON FOR SIGN IN
-
 let logIn= async()=>{
-    fetch('http://localhost:3333/auth/login', {
+    //get inputted email/password
+    let email=document.querySelector("#email").value;
+    let password=document.querySelector("#password").value;
+    console.log(email);
+    console.log(password);
+    let result= await fetch('http://localhost:3333/auth/login', {
         method: 'POST',
         body: JSON.stringify({
-            email: "j@j.com",
-            password: "test",
+            email: email,
+            password: password,
           }),
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
@@ -191,15 +199,72 @@ let logIn= async()=>{
       })
       .then((response) => response.text())
       .then((text) => console.log(text))
+      closeLogin();
+}
+//sign up function
+let signUp= async()=>{
+    let email=document.querySelector("#email").value;
+    let password=document.querySelector("#password").value;
+    console.log(email);
+    console.log(password);
+    let result= await fetch('http://localhost:3333/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+      .then((response) => response.text())
+      .then((text) => console.log(text))
+      closeLogin();
+}
+//prevent submit
+let preventRefresh=(e)=>{
+    e.preventDefault();
+}
+let loginForm=document.querySelector(".loginForm");
+loginForm.addEventListener("submit", preventRefresh);
+//Log in button in header
+let signInButton=document.querySelector("#profile");
+signInButton.addEventListener("click", logInPopUp);
+
+//login button for pop up screen
+let logInButton=document.querySelector("#logInButton");
+logInButton.addEventListener("click", logIn);
+
+//sigin button for pop up screen
+let signUpButton=document.querySelector("#signUpButton");
+signUpButton.addEventListener("click", signUp);
+//sign out
+
+//who is signed in?-function/button
+let whoAmI=async()=>{
+    let result= await fetch('http://localhost:3333/feature')
+      .then((response) => response.text())
+      .then((text) => console.log(text))
+      closeLogin();
+}
+let whoAmIButton=document.querySelector("#whoAmIButton");
+whoAmIButton.addEventListener("click", whoAmI);
+
+
+//search for subreddits function
+let searchBar=document.querySelector("#search");
+
+let findSubreddit=()=>{
+    //get search query
+    let searchQuery=searchBar.value;
+    //get posts to display
+    getCommunity(searchQuery);
 }
 
-let signupButton=document.querySelector("#profile");
-signupButton.addEventListener("click", logIn);
-//check session status
-let sessionChecker= async()=>{
-    fetch("http://localhost:3333/feature"), {
-        method:"GET"
-
+searchBar.addEventListener("keydown",
+    function (e) {
+        if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
+            findSubreddit();
+        }
     }
-    // res.send("Secret feature used!")
-} 
+);
