@@ -10,7 +10,7 @@ let postContent;
 let currentCommunity="careeradvice";
 let currentPosts;
 
-
+//get posts from subreddit
 let getStuff= async (community, sort="best")=>{
     let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json`);
     let myData= await results.json();
@@ -159,14 +159,7 @@ let closePost=(e)=>{
     console.log("CLEAR")
 }
 document.querySelector(".overlay").addEventListener("click",(e)=>{closePost(e)});
-//community feed X
-//main feed 
-//sort X
-//create post 
-//comment x
-//reply 5
-//vote 1
-//pop up post when clicked x
+
 
 
 //log in screen pop up
@@ -198,7 +191,7 @@ let logIn= async()=>{
         },
       })
       .then((response) => response.text())
-      .then((text) => console.log(text))
+      .then((text) => console.log(text+" is logged in"))
       closeLogin();
 }
 //sign up function
@@ -241,14 +234,33 @@ signUpButton.addEventListener("click", signUp);
 //sign out
 
 //who is signed in?-function/button
-let whoAmI=async()=>{
-    let result= await fetch('http://localhost:3333/feature')
-      .then((response) => response.text())
-      .then((text) => console.log(text))
-      closeLogin();
-}
-let whoAmIButton=document.querySelector("#whoAmIButton");
+let whoAmI = async () => {
+    try {
+        let result = await fetch('http://localhost:3333/feature', {
+            method: 'GET',
+            credentials: 'include', // This includes cookies in the request
+            headers:{
+                "Set-Cookie":"promo_shown=1; SameSite=None",
+                "Accept": "*/*"
+            }
+        });
+
+        if (result.ok) {
+            let text = await result.text();
+            console.log(text);
+        } else {
+            console.log('Request failed with status:', result.status);
+        }
+        
+        closeLogin();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+let whoAmIButton = document.querySelector("#whoAmIButton");
 whoAmIButton.addEventListener("click", whoAmI);
+
 
 
 //search for subreddits function
@@ -268,3 +280,10 @@ searchBar.addEventListener("keydown",
         }
     }
 );
+
+//get current user
+// let getCurrentUser=async()=>{
+//     let result= await fetch('http://localhost:3333/auth/signup', {
+
+//     }
+// }

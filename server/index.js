@@ -1,12 +1,13 @@
 var express = require('express');
 var session = require('express-session');
+const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const salt = 10;
 require('dotenv').config();
 //mongodb setup
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://proffitlemon:dbsecpw4CFA@cluster0.ule7zrt.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MYDB;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -18,10 +19,12 @@ const client = new MongoClient(uri, {
 });
 let dbName="users";
 let collectionName="users";
+
 var app = express();
+app.use(cookieParser());
 var PORT = process.env.PORT || 8080;
 
-
+app.use(express.static(__dirname+"/../"));
 
 
 // Express functions, setting up session, json
@@ -37,14 +40,18 @@ app.use(cors({
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
-  saveUninitialized: false
+  saveUninitialized: true,
+  cookie:{
+    sameSite:"lax"
+  }
 }));
 // "database" object for storing users
 var users = {};
 
-// function to check if there is a user in a session, probably doesnt need commented out connection to db
+// function to check if there is a user in a session
 var sessionChecker = (req, res, next) => {  
-    console.log("Session Test", req.session)  
+    console.log("Session Test", req.session)
+    console.log(req.session.id); 
     if (req.session.user) {
         console.log(`Found User Session`.green);
         next();
@@ -100,10 +107,13 @@ app.post("/auth/login", async function(req, res) {
     console.log("Found user ",result[0].name, req.body.email);
     console.log("Password match?",bcrypt.compareSync(req.body.password.toString(), result[0].password.toString()));
     if (result[0].name==req.body.email) {
+      console.log("email matches")
       if (bcrypt.compareSync(req.body.password, result[0].password)) {
+        console.log("password matches")
           //set session
           req.session.user = user;
           console.log("Yipee, Session user is:", req.session.user);
+          console.log(req.session.id);
       }
       else {
           req.session.user = false;
@@ -135,6 +145,7 @@ app.get("/auth/logout", function(req, res) {
 });
 
 app.get("/feature", sessionChecker, function(req, res) {
+
   res.send("Secret feature used!")
 })
 
