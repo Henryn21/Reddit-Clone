@@ -137,6 +137,10 @@ app.post("/auth/login", async function(req, res) {
 
 
 });
+//get and return user session
+app.get("/getSessionUser", function(req, res) {
+  return req.session;
+})
 
 app.get("/auth/logout", function(req, res) {
   req.session.destroy(function () {

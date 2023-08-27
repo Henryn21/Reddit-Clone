@@ -193,6 +193,12 @@ let logIn= async()=>{
       .then((response) => response.text())
       .then((text) => console.log(text+" is logged in"))
       closeLogin();
+      displayUser();
+}
+//display current user in header
+let displayUser=()=>{
+    //get user
+    //set header to username
 }
 //sign up function
 let signUp= async()=>{
@@ -247,7 +253,7 @@ let whoAmI = async () => {
 
         if (result.ok) {
             let text = await result.text();
-            console.log(text);
+            // console.log("Who am I?, I am : ",text);
         } else {
             console.log('Request failed with status:', result.status);
         }
@@ -258,10 +264,24 @@ let whoAmI = async () => {
     }
 };
 
+//checks if user, logs user on server side
 let whoAmIButton = document.querySelector("#whoAmIButton");
 whoAmIButton.addEventListener("click", whoAmI);
 
-
+//check and log user to browser
+async function getSessionUser() {
+    try {
+      const response = await fetch('http://localhost:3333/getSessionUser');
+      const data = await response.json();
+      console.log(data);
+      return data.user; // Assuming the response contains a "user" field
+    } catch (error) {
+      console.error('Error fetching session user:', error);
+      return null;
+    }
+  }
+  let getUserButton = document.querySelector("#getUserButton");
+  getUserButton.addEventListener("click", getSessionUser);
 
 //search for subreddits function
 let searchBar=document.querySelector("#search");
