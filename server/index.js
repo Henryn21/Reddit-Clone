@@ -135,7 +135,6 @@ app.post("/auth/login", async function(req, res) {
   }
 
 
-
 });
 //get and return user session
 app.get("/getSessionUser", function(req, res) {

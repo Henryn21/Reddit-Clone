@@ -12,7 +12,7 @@ let currentPosts;
 
 //get posts from subreddit
 let getStuff= async (community, sort="best")=>{
-    let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json`);
+    let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json?raw_json=1`);
     let myData= await results.json();
     return myData.data.children;//build post components based on returned posts info
 }
@@ -65,6 +65,7 @@ let sortPosts=(sortType)=>{
 }
 //show selected post: Full post, comments, replies 
 let popUp= async(post)=>{
+    //check for image post
     //select post
     //get post text and comments, replies
     console.log(currentPosts[post.id].data.selftext);
@@ -82,7 +83,7 @@ let popUp= async(post)=>{
         selectedPost.innerHTML=`
             <div class="selectedPostVote">
                 <i class="fa-solid fa-arrow-up"></i>
-                <p class="postScore">${currentPosts [post.id].data.score}</p>
+                <p class="postScore">${currentPosts[post.id].data.score}</p>
                 <i class="fa-solid fa-arrow-down"></i>
             </div>
             <div class="postBody">
@@ -159,8 +160,13 @@ let closePost=(e)=>{
     console.log("CLEAR")
 }
 document.querySelector(".overlay").addEventListener("click",(e)=>{closePost(e)});
-
-
+//close post by button function
+let exitPost=()=>{
+    let selectedPost=document.querySelector(".selectedPost");
+    document.querySelector(".selectedContainer").removeChild(selectedPost)
+    document.querySelector(".overlay").classList.remove("visible");
+    console.log("CLEAR")
+}
 
 //log in screen pop up
 let loginOverlay=document.querySelector(".loginOverlay");
@@ -192,13 +198,16 @@ let logIn= async()=>{
       })
       .then((response) => response.text())
       .then((text) => console.log(text+" is logged in"))
+      window.localStorage.setItem("user", email);
       closeLogin();
       displayUser();
 }
 //display current user in header
 let displayUser=()=>{
+    let user=window.localStorage.getItem("user");
     //get user
     //set header to username
+    document.querySelector("#profile").textContent=user;
 }
 //sign up function
 let signUp= async()=>{

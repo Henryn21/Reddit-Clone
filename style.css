@@ -167,6 +167,10 @@ body{
     background-color: #000;
     color: white;
     height: 60px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .commentSection{
@@ -256,10 +260,11 @@ body{
     color: gray;
     font-size: 26px;
     float: right;
-    padding-top: 10px;
-    padding-right: 10px;
+    padding-top: 20px;
+    padding-right: 20px;
     border: none;
     background-color: inherit;
+
 }
 
 #profile{
