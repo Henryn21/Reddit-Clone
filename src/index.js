@@ -69,7 +69,16 @@ let popUp= async(post)=>{
     //select post
     //get post text and comments, replies
     console.log(currentPosts[post.id].data.selftext);
-    fetch(`${currentPosts[post.id].data.url}.json`)
+    //check for image post
+    console.log(currentPosts[post.id].data.url);
+    //if image post, display image WIP!!!!
+    let isImagePost=false;
+    if(currentPosts[post.id].data.url.includes("jpeg")||currentPosts[post.id].data.url.includes("png")||currentPosts[post.id].data.url.includes("gif")){
+        console.log("Image post");
+        isImagePost=true;
+    }
+    //get post
+    fetch(`https://www.reddit.com${currentPosts[post.id].data.permalink}.json`)
     .then((selectedPromise)=>{return selectedPromise.json()})
     .then((selected)=>{
         //trim array with slice, returns first 5
@@ -93,12 +102,21 @@ let popUp= async(post)=>{
                 </div>
                 <div class="postContentSelected">
                     <h1 class="postTitle">${currentPosts[post.id].data.title}</h1>
+                    <div class="postContentImage"></div>
                     <p>${currentPosts[post.id].data.selftext}</p>
                 </div>
             </div>
             <div class="commentSection">
-            </div>`;//FINISH THIS CONTAINTER DIV, WIP!!
+            </div>`;
         document.querySelector(".selectedContainer").appendChild(selectedPost);
+        //if post has image, display image
+        if(isImagePost==true){
+            let imageDisplay=document.createElement("img");
+            imageDisplay.classList.add("imageDisplay");
+            imageDisplay.src=currentPosts[post.id].data.url;
+            console.log(document.querySelector(".postContentImage"));
+            document.querySelector(".postContentImage").appendChild(imageDisplay);
+        }
         document.querySelector(".selectedContainer").addEventListener("click", (e)=>{e.stopPropagation()});
         document.querySelector(".content").classList.add("pause");
         document.querySelector(".overlay").classList.add("visible");
@@ -118,6 +136,7 @@ let popUp= async(post)=>{
         
         // </div>`
         }
+        
     );
 }
 //build comment section div

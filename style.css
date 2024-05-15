@@ -145,6 +145,8 @@ body{
     width: 100%;
 
 }
+/*class for content of selected post(image or paragraph)*/
+
 .overlay{
     display: none;
     z-index: 50;
