@@ -306,3 +306,7 @@ body{
 #communitiesList{
     font-size: 22px;
 }
+
+.imageDisplay{
+    max-width: 700px ;
+}
