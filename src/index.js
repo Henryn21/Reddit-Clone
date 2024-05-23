@@ -10,9 +10,9 @@ let postContent;
 let currentCommunity="careeradvice";
 let currentPosts;
 
-
+//get posts from subreddit
 let getStuff= async (community, sort="best")=>{
-    let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json`);
+    let results= await fetch(`https://www.reddit.com/r/${community}/${sort}/.json?raw_json=1`);
     let myData= await results.json();
     return myData.data.children;//build post components based on returned posts info
 }
@@ -65,10 +65,20 @@ let sortPosts=(sortType)=>{
 }
 //show selected post: Full post, comments, replies 
 let popUp= async(post)=>{
+    //check for image post
     //select post
     //get post text and comments, replies
     console.log(currentPosts[post.id].data.selftext);
-    fetch(`${currentPosts[post.id].data.url}.json`)
+    //check for image post
+    console.log(currentPosts[post.id].data.url);
+    //if image post, display image WIP!!!!
+    let isImagePost=false;
+    if(currentPosts[post.id].data.url.includes("jpeg")||currentPosts[post.id].data.url.includes("png")||currentPosts[post.id].data.url.includes("gif")){
+        console.log("Image post");
+        isImagePost=true;
+    }
+    //get post
+    fetch(`https://www.reddit.com${currentPosts[post.id].data.permalink}.json`)
     .then((selectedPromise)=>{return selectedPromise.json()})
     .then((selected)=>{
         //trim array with slice, returns first 5
@@ -82,7 +92,7 @@ let popUp= async(post)=>{
         selectedPost.innerHTML=`
             <div class="selectedPostVote">
                 <i class="fa-solid fa-arrow-up"></i>
-                <p class="postScore">${currentPosts [post.id].data.score}</p>
+                <p class="postScore">${currentPosts[post.id].data.score}</p>
                 <i class="fa-solid fa-arrow-down"></i>
             </div>
             <div class="postBody">
@@ -92,12 +102,21 @@ let popUp= async(post)=>{
                 </div>
                 <div class="postContentSelected">
                     <h1 class="postTitle">${currentPosts[post.id].data.title}</h1>
+                    <div class="postContentImage"></div>
                     <p>${currentPosts[post.id].data.selftext}</p>
                 </div>
             </div>
             <div class="commentSection">
-            </div>`;//FINISH THIS CONTAINTER DIV, WIP!!
+            </div>`;
         document.querySelector(".selectedContainer").appendChild(selectedPost);
+        //if post has image, display image
+        if(isImagePost==true){
+            let imageDisplay=document.createElement("img");
+            imageDisplay.classList.add("imageDisplay");
+            imageDisplay.src=currentPosts[post.id].data.url;
+            console.log(document.querySelector(".postContentImage"));
+            document.querySelector(".postContentImage").appendChild(imageDisplay);
+        }
         document.querySelector(".selectedContainer").addEventListener("click", (e)=>{e.stopPropagation()});
         document.querySelector(".content").classList.add("pause");
         document.querySelector(".overlay").classList.add("visible");
@@ -117,6 +136,7 @@ let popUp= async(post)=>{
         
         // </div>`
         }
+        
     );
 }
 //build comment section div
@@ -159,15 +179,13 @@ let closePost=(e)=>{
     console.log("CLEAR")
 }
 document.querySelector(".overlay").addEventListener("click",(e)=>{closePost(e)});
-//community feed X
-//main feed 
-//sort X
-//create post 
-//comment x
-//reply 5
-//vote 1
-//pop up post when clicked x
-
+//close post by button function
+let exitPost=()=>{
+    let selectedPost=document.querySelector(".selectedPost");
+    document.querySelector(".selectedContainer").removeChild(selectedPost)
+    document.querySelector(".overlay").classList.remove("visible");
+    console.log("CLEAR")
+}
 
 //log in screen pop up
 let loginOverlay=document.querySelector(".loginOverlay");
@@ -198,8 +216,17 @@ let logIn= async()=>{
         },
       })
       .then((response) => response.text())
-      .then((text) => console.log(text))
+      .then((text) => console.log(text+" is logged in"))
+      window.localStorage.setItem("user", email);
       closeLogin();
+      displayUser();
+}
+//display current user in header
+let displayUser=()=>{
+    let user=window.localStorage.getItem("user");
+    //get user
+    //set header to username
+    document.querySelector("#profile").textContent=user;
 }
 //sign up function
 let signUp= async()=>{
@@ -241,15 +268,48 @@ signUpButton.addEventListener("click", signUp);
 //sign out
 
 //who is signed in?-function/button
-let whoAmI=async()=>{
-    let result= await fetch('http://localhost:3333/feature')
-      .then((response) => response.text())
-      .then((text) => console.log(text))
-      closeLogin();
-}
-let whoAmIButton=document.querySelector("#whoAmIButton");
+let whoAmI = async () => {
+    try {
+        let result = await fetch('http://localhost:3333/feature', {
+            method: 'GET',
+            credentials: 'include', // This includes cookies in the request
+            headers:{
+                "Set-Cookie":"promo_shown=1; SameSite=None",
+                "Accept": "*/*"
+            }
+        });
+
+        if (result.ok) {
+            let text = await result.text();
+            // console.log("Who am I?, I am : ",text);
+        } else {
+            console.log('Request failed with status:', result.status);
+        }
+        
+        closeLogin();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+//checks if user, logs user on server side
+let whoAmIButton = document.querySelector("#whoAmIButton");
 whoAmIButton.addEventListener("click", whoAmI);
 
+//check and log user to browser
+async function getSessionUser() {
+    try {
+      const response = await fetch('http://localhost:3333/getSessionUser');
+      const data = await response.json();
+      console.log(data);
+      return data.user; // Assuming the response contains a "user" field
+    } catch (error) {
+      console.error('Error fetching session user:', error);
+      return null;
+    }
+  }
+  let getUserButton = document.querySelector("#getUserButton");
+  getUserButton.addEventListener("click", getSessionUser);
 
 //search for subreddits function
 let searchBar=document.querySelector("#search");
@@ -268,3 +328,10 @@ searchBar.addEventListener("keydown",
         }
     }
 );
+
+//get current user
+// let getCurrentUser=async()=>{
+//     let result= await fetch('http://localhost:3333/auth/signup', {
+
+//     }
+// }

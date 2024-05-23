@@ -145,6 +145,8 @@ body{
     width: 100%;
 
 }
+/*class for content of selected post(image or paragraph)*/
+
 .overlay{
     display: none;
     z-index: 50;
@@ -167,6 +169,10 @@ body{
     background-color: #000;
     color: white;
     height: 60px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .commentSection{
@@ -256,10 +262,11 @@ body{
     color: gray;
     font-size: 26px;
     float: right;
-    padding-top: 10px;
-    padding-right: 10px;
+    padding-top: 20px;
+    padding-right: 20px;
     border: none;
     background-color: inherit;
+
 }
 
 #profile{
@@ -291,4 +298,11 @@ body{
     border-radius:50px ;
     border: none;
     height: 50px;
+}
+#dropdownMenuLink{
+    font-size: 22px;
+    height: 50px;
+}
+#communitiesList{
+    font-size: 22px;
 }
